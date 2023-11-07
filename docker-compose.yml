@@ -1,0 +1,28 @@
+version: '3.7' # Utilise la version 3.7 de la spécification de docker-compose
+
+services:
+  web: # Nom du service web
+    image: nginx:latest # Utilise la dernière image officielle de nginx
+    ports:
+      - "80:80" # Fait correspondre le port 80 du conteneur au port 80 de la machine hôte
+    volumes:
+      - ./html:/usr/share/nginx/html # Montez le répertoire local ./html dans le conteneur
+    networks:
+      - webnet # Défini pour utiliser le réseau "webnet" personnalisé ci-dessous
+
+  db: # Nom du service de base de données
+    image: postgres:latest # Utilise la dernière image officielle de postgres
+    environment: # Utilise les variables d'environnement pour configurer postgres
+      POSTGRES_DB: exemple # Défini le nom de la base de données par défaut
+      POSTGRES_USER: utilisateur_exemple # Défini l'utilisateur de la base de données
+      POSTGRES_PASSWORD: motdepasseexemple # Défini le mot de passe de l'utilisateur de la base de données
+    volumes:
+      - db-data:/var/lib/postgresql/data # Persiste les données postgres dans un volume nommé
+    networks:
+      - webnet # Ce service appartient également au réseau "webnet"
+
+networks:
+  webnet: # Définit le réseau personnalisé "webnet"
+
+volumes:
+  db-data: # Définit le volume nommé "db-data" qui stocke les données de la base de données persistantes
